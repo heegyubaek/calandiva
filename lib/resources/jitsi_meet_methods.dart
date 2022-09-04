@@ -5,20 +5,29 @@ import 'package:jitsi_meet/jitsi_meet.dart';
 
 class JitsiMeetMethods {
   final AuthMethods _authMethods = AuthMethods();
-  void createMeeting(
-      {required String roomName,
-      required bool isAudioMuted,
-      required bool isVideoMuted}) async {
+  void createMeeting({
+    required String roomName,
+    required bool isAudioMuted,
+    required bool isVideoMuted,
+    String userName = '',
+  }) async {
     try {
       FeatureFlag featureFlag = FeatureFlag();
       featureFlag.welcomePageEnabled = false;
       featureFlag.resolution = FeatureFlagVideoResolution
           .MD_RESOLUTION; // Limit video resolution to 360p
 
+      String name;
+      if (userName.isEmpty) {
+        name = _authMethods.user.displayName!;
+      } else {
+        name = userName;
+      }
+
       var options = JitsiMeetingOptions(room: roomName)
         // ..serverURL = "https://someHost.com"
         // ..subject = "Meeting with Gunschu"
-        ..userDisplayName = _authMethods.user.displayName
+        ..userDisplayName = name
         ..userEmail = _authMethods.user.email
         ..userAvatarURL = _authMethods.user.photoURL // or .png
         ..audioMuted = isAudioMuted

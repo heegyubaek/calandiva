@@ -1,6 +1,9 @@
 import 'package:calandiva/resources/auth_methods.dart';
+import 'package:calandiva/resources/jitsi_meet_methods.dart';
 import 'package:calandiva/utils/colors.dart';
+import 'package:calandiva/widgets/meeting_option.dart';
 import 'package:flutter/material.dart';
+import 'package:jitsi_meet/jitsi_meet.dart';
 
 class VideoCallScreen extends StatefulWidget {
   const VideoCallScreen({Key? key}) : super(key: key);
@@ -15,6 +18,10 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   late TextEditingController meetingIdController;
   late TextEditingController nameController;
 
+  final JitsiMeetMethods _jitsiMeetMethods = JitsiMeetMethods();
+  bool isAudioMuted = true;
+  bool isVideoMuted = true;
+
   @override
   void initState() {
     meetingIdController = TextEditingController();
@@ -24,7 +31,22 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     super.initState();
   }
 
-  _joinMeeting() {}
+  @override
+  void dispose() {
+    super.dispose();
+    meetingIdController.dispose();
+    nameController.dispose();
+    JitsiMeet.removeAllListeners();
+  }
+
+  _joinMeeting() {
+    _jitsiMeetMethods.createMeeting(
+      roomName: meetingIdController.text,
+      isAudioMuted: isAudioMuted,
+      isVideoMuted: isVideoMuted,
+      userName: nameController.text,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,8 +111,31 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
               ),
             ),
           ),
+          const SizedBox(height: 20),
+          MeetingOption(
+            text: 'Mute Audio',
+            isMute: isAudioMuted,
+            onChanged: onAudioMuted,
+          ),
+          MeetingOption(
+            text: 'Turn Off My video',
+            isMute: isVideoMuted,
+            onChanged: onVideoMuted,
+          ),
         ],
       ),
     );
+  }
+
+  onAudioMuted(bool val) {
+    setState(() {
+      isAudioMuted = val;
+    });
+  }
+
+  onVideoMuted(bool val) {
+    setState(() {
+      isVideoMuted = val;
+    });
   }
 }
