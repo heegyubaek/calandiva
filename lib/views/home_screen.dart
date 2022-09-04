@@ -1,6 +1,8 @@
+import 'package:calandiva/resources/auth_methods.dart';
 import 'package:calandiva/utils/colors.dart';
 import 'package:calandiva/views/history_meeting_screen.dart';
 import 'package:calandiva/views/meeting_screen.dart';
+import 'package:calandiva/widgets/custom_button.dart';
 import 'package:calandiva/widgets/home_meeting_button.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
     MeetingScreen(),
     const HistoryMeetingScreen(),
     const Text('Contacts'),
-    const Text('Settings'),
+    CustomButton(text: 'Log Out', onPressed: () => AuthMethods().signOut()),
   ];
 
   @override
