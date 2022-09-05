@@ -36,6 +36,11 @@ class MeetingScreen extends StatelessWidget {
               text: 'Join Meeting',
               icon: Icons.add_box_rounded,
             ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
             HomeMettingButton(
               onPressed: () {},
               text: 'Schedule',
